@@ -1,4 +1,4 @@
-# commandLineParser
+# CommandLineParser
 Simple parser for commandline arguments written in Java.
 
 The parser is configured by implementing ``` ConfigBuilder ``` and mapping "modes" to ConfigBuilders. 
