@@ -1,4 +1,4 @@
-package dk.esoftware.commandLineParser;
+package dk.eSoftware.commandLineParser;
 
 /**
  * Thrown when {@link CommandLineParser} were unable to find the specified {@link CommandLineParser.ConfigBuilder}

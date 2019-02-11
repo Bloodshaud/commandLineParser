@@ -1,4 +1,4 @@
-package dk.esoftware.commandLineParser;
+package dk.eSoftware.commandLineParser;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package dk.esoftware.commandLineParser;
+package dk.eSoftware.commandLineParser;
 
 /**
  * Thrown when a commandline argument is formatted incorrectly
