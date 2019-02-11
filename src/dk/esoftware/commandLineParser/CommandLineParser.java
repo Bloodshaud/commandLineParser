@@ -34,7 +34,7 @@ public class CommandLineParser {
      * @param input the string to be parsed
      * @return null if input is null or empty - otherwise a {@link Configuration} created by the assigned {@link ConfigBuilder}
      */
-    public Configuration parse(String input) throws NoSuchBuilderException {
+    public Configuration parse(String input) throws NoSuchBuilderException, WrongFormatException {
         if (input == null || input.isEmpty()) {
             return null;
         }
@@ -51,7 +51,7 @@ public class CommandLineParser {
         return configBuilder.build();
     }
 
-    private void doParse(String[] s, ConfigBuilder configBuilder) {
+    private void doParse(String[] s, ConfigBuilder configBuilder) throws WrongFormatException {
         String currCommand = s[0];
         List<String> currCommands = new ArrayList<>();
 
