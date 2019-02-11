@@ -1,0 +1,24 @@
+<project name="commandLineParser" default="help" basedir="."
+>
+
+    <property name="build.dir" value="out"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="doc.dir" value="doc"/>
+
+    <target name="help">
+        <echo>
+            myFirstBlockchain build management
+            Targets:
+            initialize: Download dependencies
+            clean: Removes all bytecode and libs
+            =====
+        </echo>
+    </target>
+
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${doc.dir}"/>
+    </target>
+
+</project>
