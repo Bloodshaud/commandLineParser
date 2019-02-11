@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="commandLineParser:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/commandLineParser_jar</output-path>
+    <root id="archive" name="commandLineParser.jar">
+      <element id="module-output" name="commandLineParser" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-source" name="commandLineParser" />
+    </root>
+  </artifact>
+</component>
