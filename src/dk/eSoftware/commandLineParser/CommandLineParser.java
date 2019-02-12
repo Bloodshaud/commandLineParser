@@ -31,22 +31,21 @@ public class CommandLineParser {
      * <br/>
      * Both commands and arguments are stripped of their <i>"-"</i> or <i>"--"</i> prefix
      *
-     * @param input the string to be parsed
+     * @param input the string array to be parsed
      * @return null if input is null or empty - otherwise a {@link Configuration} created by the assigned {@link ConfigBuilder}
      */
-    public Configuration parse(String input) throws NoSuchBuilderException, WrongFormatException {
-        if (input == null || input.isEmpty()) {
+    public Configuration parse(String[] input) throws NoSuchBuilderException, WrongFormatException {
+        if (input == null || input.length == 0) {
             return null;
         }
 
-        String[] s = input.split(" ");
-        ConfigBuilder configBuilder = mapping.get(s[0]);
+        ConfigBuilder configBuilder = mapping.get(input[0]);
 
         if (configBuilder == null) {
-            throw new NoSuchBuilderException("Unable to find ConfigBuilder from mode: \"" + s[0] + "\"");
+            throw new NoSuchBuilderException("Unable to find ConfigBuilder from mode: \"" + input[0] + "\"");
         }
 
-        doParse(s, configBuilder);
+        doParse(input, configBuilder);
 
         return configBuilder.build();
     }
@@ -69,6 +68,13 @@ public class CommandLineParser {
             }
         }
         configBuilder.applyCommand(new Command(currCommand, currCommands));
+    }
+
+    /**
+     * @return terminal-formatted string describing configuration options
+     */
+    public String help() {
+        return "Currently no help information";
     }
 
     public static class Command {
@@ -104,6 +110,12 @@ public class CommandLineParser {
          * @return the configuration object
          */
         Configuration build();
+
+        /**
+         * @return a proper terminal-formatted help message describing arguments
+         * and their parameters for this configuration
+         */
+        String help();
     }
 
 
