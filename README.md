@@ -4,6 +4,19 @@ Simple parser for commandline arguments written in Java.
 The parser is configured by implementing ``` ConfigBuilder ``` and mapping "modes" to ConfigBuilders. 
 ConfigBuilders are then to produce a ``` Configuration ``` from the given arguments, which are given.
 
+# Using CommandLineParser
+CommandLineParser can be retrieved with maven by adding a maven m2Compatible repository with the url 
+`http://e-software.dk:8088/repository/internal/`
+And adding the following to the POM:
+`
+<dependency>
+  <groupId>dk.eSoftware</groupId>
+  <artifactId>commandLineParser</artifactId>
+  <version>1.1.1</version>
+</dependency>
+`
+
+
 # Parser specifications
 All commands parsable by the commandLineParser is of the form:
 
