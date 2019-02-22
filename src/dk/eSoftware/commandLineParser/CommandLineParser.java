@@ -74,14 +74,19 @@ public class CommandLineParser {
      * @return terminal-formatted string describing configuration options
      */
     public String help() {
-        return "Currently no help information";
+        StringBuilder sb = new StringBuilder();
+        sb.append("Help information compiled by CommandLineParser:\n");
+        for (String s : mapping.keySet()) {
+            sb.append(mapping.get(s).help()).append("\n");
+        }
+        return sb.toString();
     }
 
     public static class Command {
         private String command;
         private List<String> params;
 
-        public Command(String command, List<String> params) {
+        Command(String command, List<String> params) {
             this.command = command;
             this.params = params;
         }
