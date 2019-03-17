@@ -2,7 +2,6 @@ package dk.eSoftware.commandLineParser;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @SuppressWarnings("unused")
 public abstract class CommandLineParser {
@@ -25,11 +24,14 @@ public abstract class CommandLineParser {
      * @return null if input is null or empty - otherwise a {@link Configuration} created by the assigned {@link ConfigBuilder}
      */
     public Configuration parse(String[] input) throws NoSuchBuilderException, WrongFormatException {
+        String firstParam;
         if (input == null || input.length == 0) {
-            return null;
+            firstParam = null;
+        } else {
+            firstParam = input[0];
         }
 
-        ConfigBuilder configBuilder = getConfigBuilder(input[0]);
+        ConfigBuilder configBuilder = getConfigBuilder(firstParam);
 
         doParse(input, configBuilder);
 
@@ -46,6 +48,10 @@ public abstract class CommandLineParser {
     protected abstract ConfigBuilder getConfigBuilder(String firstParam) throws NoSuchBuilderException;
 
     private void doParse(String[] s, ConfigBuilder configBuilder) throws WrongFormatException {
+        if(s == null){
+            return;
+        }
+
         String currCommand = s[0];
         List<String> currCommands = new ArrayList<>();
 
@@ -70,24 +76,6 @@ public abstract class CommandLineParser {
      */
     public abstract String help();
 
-    public static class Command {
-        private String command;
-        private List<String> params;
-
-        Command(String command, List<String> params) {
-            this.command = command;
-            this.params = params;
-        }
-
-        public String getCommand() {
-            return command;
-        }
-
-        public List<String> getParams() {
-            return params;
-        }
-    }
-
     public interface ConfigBuilder {
 
         /**
@@ -109,6 +97,24 @@ public abstract class CommandLineParser {
          * and their parameters for this configuration
          */
         String help();
+    }
+
+    public static class Command {
+        private String command;
+        private List<String> params;
+
+        Command(String command, List<String> params) {
+            this.command = command;
+            this.params = params;
+        }
+
+        public String getCommand() {
+            return command;
+        }
+
+        public List<String> getParams() {
+            return params;
+        }
     }
 
 
