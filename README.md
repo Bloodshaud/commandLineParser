@@ -12,7 +12,7 @@ And adding the following to the POM:
 <dependency>
   <groupId>dk.eSoftware</groupId>
   <artifactId>commandLineParser</artifactId>
-  <version>1.1.1</version>
+  <version>1.2</version>
 </dependency>
 ```
 As newer versions are released they can be found [here](http://e-software.dk:8088/#artifact/dk.eSoftware/commandLineParser)
