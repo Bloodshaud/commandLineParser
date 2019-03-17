@@ -5,17 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("unused")
-public class CommandLineParser {
-    private Map<String, ConfigBuilder> mapping;
-
-    /**
-     * Constructor for a {@link CommandLineParser}
-     *
-     * @param mapping a map between modes and configbuilders.
-     */
-    public CommandLineParser(Map<String, ConfigBuilder> mapping) {
-        this.mapping = mapping;
-    }
+public abstract class CommandLineParser {
 
     /**
      * Utility for parsing commandline parameters into configuration objects
@@ -39,16 +29,21 @@ public class CommandLineParser {
             return null;
         }
 
-        ConfigBuilder configBuilder = mapping.get(input[0]);
-
-        if (configBuilder == null) {
-            throw new NoSuchBuilderException("Unable to find ConfigBuilder from mode: \"" + input[0] + "\"");
-        }
+        ConfigBuilder configBuilder = getConfigBuilder(input[0]);
 
         doParse(input, configBuilder);
 
         return configBuilder.build();
     }
+
+    /**
+     * Method that must be implemented retrieving the correct configBuilder given first argument
+     *
+     * @param firstParam first argument from commandline
+     * @return {@link ConfigBuilder} to be used in parsing
+     * @throws NoSuchBuilderException when no {@link ConfigBuilder} is found
+     */
+    protected abstract ConfigBuilder getConfigBuilder(String firstParam) throws NoSuchBuilderException;
 
     private void doParse(String[] s, ConfigBuilder configBuilder) throws WrongFormatException {
         String currCommand = s[0];
@@ -73,14 +68,7 @@ public class CommandLineParser {
     /**
      * @return terminal-formatted string describing configuration options
      */
-    public String help() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Help information compiled by CommandLineParser:\n");
-        for (String s : mapping.keySet()) {
-            sb.append(mapping.get(s).help()).append("\n");
-        }
-        return sb.toString();
-    }
+    public abstract String help();
 
     public static class Command {
         private String command;
