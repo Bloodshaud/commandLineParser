@@ -48,7 +48,7 @@ public abstract class CommandLineParser {
     protected abstract ConfigBuilder getConfigBuilder(String firstParam) throws NoSuchBuilderException;
 
     private void doParse(String[] s, ConfigBuilder configBuilder) throws WrongFormatException {
-        if(s == null){
+        if (s == null || s.length == 0) {
             return;
         }
 
