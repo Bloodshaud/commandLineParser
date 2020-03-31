@@ -14,10 +14,10 @@ public abstract class CommandLineParser {
      * --mode --param1 -arg1 -arg2 --param2 --param3 -arg1
      * </code>
      * <i>mode</i> is what determines the {@link ConfigBuilder} used
-     * <br/>
+     * <br>
      * Note that the first argument that the {@link ConfigBuilder} receives is always the mode argument.
      * The mode is also able to receive get arguments, however they wont affect choice of {@link ConfigBuilder}
-     * <br/>
+     * <br>
      * Both commands and arguments are stripped of their <i>"-"</i> or <i>"--"</i> prefix
      *
      * @param input the string array to be parsed
