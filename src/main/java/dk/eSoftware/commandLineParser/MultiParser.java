@@ -4,7 +4,7 @@ import java.util.Map;
 
 @SuppressWarnings("unused")
 public class MultiParser extends CommandLineParser {
-    private Map<String, ConfigBuilder> mapping;
+    private final Map<String, ConfigBuilder> mapping;
 
 
     /**
