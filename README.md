@@ -1,3 +1,6 @@
+[![Testsuite](https://github.com/Ernstsen/CommandLineParser/workflows/Test-suite/badge.svg)](https://github.com/Ernstsen/CommandLineParser/actions) 
+[![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/Ernstsen/CommandLineParser.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Ernstsen/CommandLineParser/context:java)
+[![Coverage Status](https://coveralls.io/repos/github/Ernstsen/CommandLineParser/badge.svg?branch=master)](https://coveralls.io/github/Ernstsen/CommandLineParser?branch=master)
 # CommandLineParser
 Simple parser for commandline arguments written in Java.
 
