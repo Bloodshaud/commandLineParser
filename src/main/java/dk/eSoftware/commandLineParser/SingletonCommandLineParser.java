@@ -1,7 +1,7 @@
 package dk.eSoftware.commandLineParser;
 
 public class SingletonCommandLineParser extends CommandLineParser {
-    private ConfigBuilder builder;
+    private final ConfigBuilder builder;
 
     /**
      * Constructor for a {@link CommandLineParser} with only one mode of operations.

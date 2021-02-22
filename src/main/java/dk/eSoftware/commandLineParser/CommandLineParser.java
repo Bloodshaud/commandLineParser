@@ -52,7 +52,11 @@ public abstract class CommandLineParser {
             return;
         }
 
-        String currCommand = s[0];
+        if (!s[0].contains("--")) {
+            throw new WrongFormatException("First parameter must start with have \"--\" ");
+        }
+
+        String currCommand = s[0].replaceFirst("--", "");
         List<String> currCommands = new ArrayList<>();
 
 
@@ -100,8 +104,8 @@ public abstract class CommandLineParser {
     }
 
     public static class Command {
-        private String command;
-        private List<String> params;
+        private final String command;
+        private final List<String> params;
 
         Command(String command, List<String> params) {
             this.command = command;
