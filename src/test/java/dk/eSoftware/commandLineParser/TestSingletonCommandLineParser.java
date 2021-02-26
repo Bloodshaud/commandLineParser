@@ -10,22 +10,20 @@ import static org.junit.Assert.*;
 
 public class TestSingletonCommandLineParser {
     private Builder builder;
-    private SingletonCommandLineParser parser;
+    private SingletonCommandLineParser<TestConfiguration> parser;
 
     @Before
     public void setUp() {
         builder = new Builder();
-        parser = new SingletonCommandLineParser(builder);
+        parser = new SingletonCommandLineParser<>(builder);
     }
 
     @Test
     public void parse() {
         try {
-            Configuration parse = parser.parse("--name -param1 -param2".split(" "));
+            TestConfiguration parse = parser.parse("--name -param1 -param2".split(" "));
 
-            TestConfiguration conf = (TestConfiguration) parse;
-
-            String val = conf.getVals();
+            String val = parse.getVals();
 
             assertEquals("Unexpected configuration", "nameparam1param2", val);
 
@@ -76,10 +74,9 @@ public class TestSingletonCommandLineParser {
     @Test
     public void correctlyHandlesTwoComplexArgs() {
         try {
-            Configuration parse = parser.parse("--name -param1 -param2 --name2 -param3 -param4".split(" "));
-            TestConfiguration conf = (TestConfiguration) parse;
+            TestConfiguration parse = parser.parse("--name -param1 -param2 --name2 -param3 -param4".split(" "));
 
-            String val = conf.getVals();
+            String val = parse.getVals();
 
             assertEquals("Unexpected configuration", "nameparam1param2,name2param3param4", val);
         } catch (NoSuchBuilderException | WrongFormatException e) {
@@ -88,7 +85,7 @@ public class TestSingletonCommandLineParser {
     }
 
 
-    private static class Builder implements CommandLineParser.ConfigBuilder {
+    private static class Builder implements CommandLineParser.ConfigBuilder<TestConfiguration> {
         private final List<String> vals = new ArrayList<>();
 
         @Override

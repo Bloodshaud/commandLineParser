@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public abstract class CommandLineParser {
+public abstract class CommandLineParser<T extends Configuration> {
 
     /**
      * Utility for parsing commandline parameters into configuration objects
@@ -23,7 +23,7 @@ public abstract class CommandLineParser {
      * @param input the string array to be parsed
      * @return null if input is null or empty - otherwise a {@link Configuration} created by the assigned {@link ConfigBuilder}
      */
-    public Configuration parse(String[] input) throws NoSuchBuilderException, WrongFormatException {
+    public T parse(String[] input) throws NoSuchBuilderException, WrongFormatException {
         String firstParam;
         if (input == null || input.length == 0) {
             firstParam = null;
@@ -31,7 +31,7 @@ public abstract class CommandLineParser {
             firstParam = input[0];
         }
 
-        ConfigBuilder configBuilder = getConfigBuilder(firstParam);
+        ConfigBuilder<T> configBuilder = getConfigBuilder(firstParam);
 
         doParse(input, configBuilder);
 
@@ -45,9 +45,9 @@ public abstract class CommandLineParser {
      * @return {@link ConfigBuilder} to be used in parsing
      * @throws NoSuchBuilderException when no {@link ConfigBuilder} is found
      */
-    protected abstract ConfigBuilder getConfigBuilder(String firstParam) throws NoSuchBuilderException;
+    protected abstract ConfigBuilder<T> getConfigBuilder(String firstParam) throws NoSuchBuilderException;
 
-    private void doParse(String[] s, ConfigBuilder configBuilder) throws WrongFormatException {
+    private void doParse(String[] s, ConfigBuilder<?> configBuilder) throws WrongFormatException {
         if (s == null || s.length == 0) {
             return;
         }
@@ -80,7 +80,7 @@ public abstract class CommandLineParser {
      */
     public abstract String help();
 
-    public interface ConfigBuilder {
+    public interface ConfigBuilder<T extends Configuration> {
 
         /**
          * Applies the given command to the builder
@@ -94,7 +94,7 @@ public abstract class CommandLineParser {
          *
          * @return the configuration object
          */
-        Configuration build();
+        T build();
 
         /**
          * @return a proper terminal-formatted help message describing arguments

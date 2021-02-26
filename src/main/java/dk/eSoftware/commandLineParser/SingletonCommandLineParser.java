@@ -1,19 +1,24 @@
 package dk.eSoftware.commandLineParser;
 
-public class SingletonCommandLineParser extends CommandLineParser {
-    private final ConfigBuilder builder;
+public class SingletonCommandLineParser<T extends Configuration> extends CommandLineParser<T> {
+    private final ConfigBuilder<T> builder;
 
     /**
      * Constructor for a {@link CommandLineParser} with only one mode of operations.
      *
      * @param builder the singleton builder
      */
-    public SingletonCommandLineParser(ConfigBuilder builder) {
+    public SingletonCommandLineParser(ConfigBuilder<T> builder) {
         this.builder = builder;
     }
 
     @Override
-    protected ConfigBuilder getConfigBuilder(String firstParam) {
+    public T parse(String[] input) throws NoSuchBuilderException, WrongFormatException {
+        return super.parse(input);
+    }
+
+    @Override
+    protected ConfigBuilder<T> getConfigBuilder(String firstParam) {
         return builder;
     }
 
