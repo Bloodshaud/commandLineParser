@@ -3,8 +3,8 @@ package dk.eSoftware.commandLineParser;
 import java.util.Map;
 
 @SuppressWarnings("unused")
-public class MultiParser extends CommandLineParser {
-    private final Map<String, ConfigBuilder> mapping;
+public class MultiParser<T extends Configuration> extends CommandLineParser<T> {
+    private final Map<String, ConfigBuilder<T>> mapping;
 
 
     /**
@@ -12,19 +12,18 @@ public class MultiParser extends CommandLineParser {
      *
      * @param mapping a map between modes and configbuilders.
      */
-    public MultiParser(Map<String, ConfigBuilder> mapping) {
+    public MultiParser(Map<String, ConfigBuilder<T>> mapping) {
         this.mapping = mapping;
     }
 
     @Override
-    protected ConfigBuilder getConfigBuilder(String firstParam) throws NoSuchBuilderException {
-        ConfigBuilder configBuilder = mapping.get(firstParam);
+    protected ConfigBuilder<T> getConfigBuilder(String firstParam) throws NoSuchBuilderException {
+        ConfigBuilder<T> configBuilder = mapping.get(firstParam);
         if (configBuilder == null) {
             throw new NoSuchBuilderException("Unable to find ConfigBuilder from mode: \"" + firstParam + "\"");
         }
         return configBuilder;
     }
-
 
     @Override
     public String help() {
