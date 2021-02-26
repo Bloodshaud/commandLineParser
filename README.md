@@ -18,7 +18,7 @@ CommandLineParser can be retrieved with maven by adding the following to the POM
 </dependency>
 
 ```
-As newer versions are released they can be found [here](https://mvnrepository.com/artifact/dk.e-software/commandLineParser/1.2.0)
+As newer versions are released they can be found [here](https://mvnrepository.com/artifact/dk.e-software/commandLineParser/)
 
 # Parser specifications
 All commands parsable by the commandLineParser is of the form:
