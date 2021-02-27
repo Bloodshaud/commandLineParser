@@ -13,5 +13,7 @@ mv target/site/apidocs docs
 git reset .
 git add docs/
 
+git commit -m "Updated docs"
+
 git push
 git checkout master
