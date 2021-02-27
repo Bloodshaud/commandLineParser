@@ -14,7 +14,7 @@ CommandLineParser can be retrieved with maven by adding the following to the POM
 <dependency>
     <groupId>dk.e-software</groupId>
     <artifactId>commandLineParser</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.2</version>
 </dependency>
 
 ```
