@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
 git checkout docs
+git merge origin/master
 
 mvn clean javadoc:javadoc
 
