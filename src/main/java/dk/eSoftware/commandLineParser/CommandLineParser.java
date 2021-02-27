@@ -3,7 +3,6 @@ package dk.eSoftware.commandLineParser;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unused")
 public abstract class CommandLineParser<T extends Configuration> {
 
     /**
@@ -31,7 +30,7 @@ public abstract class CommandLineParser<T extends Configuration> {
             firstParam = input[0];
         }
 
-        ConfigBuilder<T> configBuilder = getConfigBuilder(firstParam);
+        ConfigBuilder<? extends T> configBuilder = getConfigBuilder(firstParam);
 
         doParse(input, configBuilder);
 
@@ -45,7 +44,7 @@ public abstract class CommandLineParser<T extends Configuration> {
      * @return {@link ConfigBuilder} to be used in parsing
      * @throws NoSuchBuilderException when no {@link ConfigBuilder} is found
      */
-    protected abstract ConfigBuilder<T> getConfigBuilder(String firstParam) throws NoSuchBuilderException;
+    protected abstract ConfigBuilder<? extends T> getConfigBuilder(String firstParam) throws NoSuchBuilderException;
 
     private void doParse(String[] s, ConfigBuilder<?> configBuilder) throws WrongFormatException {
         if (s == null || s.length == 0) {
