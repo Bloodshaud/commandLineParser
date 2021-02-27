@@ -11,7 +11,7 @@ public class TestMultiParser {
     @Test
     public void testMultiParser() {
 
-        final HashMap<String, CommandLineParser.ConfigBuilder<Configuration>> map = new HashMap<>();
+        HashMap<String, CommandLineParser.ConfigBuilder<? extends Configuration>> map = new HashMap<>();
 
         map.put("A", new TestConfigBuilder("A"));
         map.put("B", new TestConfigBuilder("B"));
