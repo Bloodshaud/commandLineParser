@@ -18,7 +18,7 @@ CommandLineParser can be retrieved with maven by adding the following to the POM
 </dependency>
 
 ```
-As newer versions are released they can be found [here](https://mvnrepository.com/artifact/dk.e-software/commandLineParser/1.2.0)
+As newer versions are released they can be found [here](https://mvnrepository.com/artifact/dk.e-software/commandLineParser/)
 
 # Parser specifications
 All commands parsable by the commandLineParser is of the form:
@@ -36,5 +36,3 @@ Both commands and arguments are stripped of their <i>"-"</i> or <i>"--"</i> pref
 ## Configurations
 A ```CommandLineParser``` is configured by the mapping between commandline comments and ConfigBuilders. 
  
-## JavaDocs
-Javadocs for the library can be found here [JavaDocs](https://ernstsen.github.io/CommandLineParser/)
