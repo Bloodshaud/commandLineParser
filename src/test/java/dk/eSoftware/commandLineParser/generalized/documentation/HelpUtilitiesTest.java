@@ -7,6 +7,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 public class HelpUtilitiesTest {
+    @Test
+    public void instantiate() {
+        //Only to avoid having no-instantiation count negatively in the coverage report
+        //noinspection InstantiationOfUtilityClass
+        new HelpUtilities();
+    }
 
     @Test
     public void shouldPrintHelpStringWith2Descriptions() {
