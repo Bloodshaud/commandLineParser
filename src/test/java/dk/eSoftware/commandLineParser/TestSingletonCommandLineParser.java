@@ -27,7 +27,7 @@ public class TestSingletonCommandLineParser {
 
             assertEquals("Unexpected configuration", "nameparam1param2", val);
 
-        } catch (NoSuchBuilderException | WrongFormatException e) {
+        } catch (NoSuchBuilderException | WrongFormatException | UnknownCommandException e) {
             fail(e.getMessage());
         }
     }
@@ -48,7 +48,7 @@ public class TestSingletonCommandLineParser {
         try {
             parser.parse(null);
             parser.parse(new String[0]);
-        } catch (NoSuchBuilderException | WrongFormatException e) {
+        } catch (NoSuchBuilderException | WrongFormatException | UnknownCommandException e) {
             fail("No exception should have been thrown");
         }
     }
@@ -58,7 +58,9 @@ public class TestSingletonCommandLineParser {
         try {
             parser.parse(new String[]{"wrongFormat"});
             fail("should have thrown exception");
-        } catch (NoSuchBuilderException | WrongFormatException expected) {
+        } catch (WrongFormatException expected) {
+        } catch (NoSuchBuilderException | UnknownCommandException e) {
+            fail("Did not expect unknownCommandException!");
         }
     }
 
@@ -67,7 +69,9 @@ public class TestSingletonCommandLineParser {
         try {
             parser.parse("--self wrongFormat".split(" "));
             fail("should have thrown exception");
-        } catch (NoSuchBuilderException | WrongFormatException expected) {
+        } catch (WrongFormatException expected) {
+        } catch (NoSuchBuilderException | UnknownCommandException e) {
+            fail("Did not expect unknownCommandException!");
         }
     }
 
@@ -79,7 +83,7 @@ public class TestSingletonCommandLineParser {
             String val = parse.getVals();
 
             assertEquals("Unexpected configuration", "nameparam1param2,name2param3param4", val);
-        } catch (NoSuchBuilderException | WrongFormatException e) {
+        } catch (NoSuchBuilderException | WrongFormatException | UnknownCommandException e) {
             fail("No exception should have been thrown");
         }
     }
