@@ -98,3 +98,6 @@ The ways to set the same boolean as in the example above is as follows:
 - ``--nested.val -true``
 - ``--nested.value=true``
 - ``--nested.value -true``
+
+# JavaDocs
+JavaDocs can be found [here](https://ernstsen.github.io/CommandLineParser/)
