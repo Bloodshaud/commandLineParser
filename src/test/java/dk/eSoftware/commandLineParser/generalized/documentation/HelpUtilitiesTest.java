@@ -25,10 +25,10 @@ public class HelpUtilitiesTest {
 
         System.out.println(result);
         // Assert
-        assertTrue(result.contains("\tbooleanValue1(boolean)"));
+        assertTrue(result.contains("\tbv1(boolean)"));
         assertTrue(result.contains(" boolean 1 help"));
         assertTrue(result.contains("\tbooleanValue2(boolean)"));
-        assertTrue(result.contains("\tintegerValue1(int)"));
+        assertTrue(result.contains("\tiv1(int)"));
         assertTrue(result.contains(" integer 1 help"));
         assertTrue(result.contains("\tintegerValue2(int)"));
     }
@@ -47,10 +47,10 @@ public class HelpUtilitiesTest {
 
         assertTrue(result.contains("\tinner(PartlyAnnotatedConfiguration)"));
         assertTrue(result.contains(" Inner configuration"));
-        assertTrue(result.contains("\t\tbooleanValue1(boolean)"));
+        assertTrue(result.contains("\t\tbv1(boolean)"));
         assertTrue(result.contains(" boolean 1 help"));
         assertTrue(result.contains("\t\tbooleanValue2(boolean)"));
-        assertTrue(result.contains("\t\tintegerValue1(int)"));
+        assertTrue(result.contains("\t\tiv1(int)"));
         assertTrue(result.contains(" integer 1 help"));
         assertTrue(result.contains("\t\tintegerValue2(int)"));
         assertTrue(result.contains("\tval(String)"));

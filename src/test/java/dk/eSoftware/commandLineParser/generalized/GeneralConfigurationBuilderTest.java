@@ -58,6 +58,51 @@ public class GeneralConfigurationBuilderTest {
     }
 
     @Test
+    public void shouldReadValuesIntoConfigurationObjectUsingBothNamesAndVariableNames() {
+        // Arrange
+        final GeneralConfigurationBuilder<SimpleConfigurationClassBoxedTypes> builder =
+                new GeneralConfigurationBuilder<>(SimpleConfigurationClassBoxedTypes.class);
+
+        final SingletonCommandLineParser<SimpleConfigurationClassBoxedTypes> parser = new SingletonCommandLineParser<>(builder);
+
+        String stringVariable1Expected = "heheTest";
+        String stringVariable2Expected = "alsoTest";
+        int integerValue1Expected = 12;
+        int integerValue2Expected = 2342;
+        Float floatValue1Expected = 2.4f;
+        Float floatValue2Expected = 4.2f;
+
+        // Act
+        SimpleConfigurationClassBoxedTypes configuration = null;
+        try {
+            configuration = parser.parse((
+                            "--sv1=" + stringVariable1Expected + " " +
+                                    "--stringVariable2 -" + stringVariable2Expected + " " +
+                                    "--bv1=true --booleanValue2 -FALSE " +
+                                    "--iv1=" + integerValue1Expected + " " +
+                                    "--integerValue2 -" + integerValue2Expected + " " +
+                                    "--fv1=2.4 --floatValue2 -4.2"
+                    ).split(" ")
+            );
+        } catch (NoSuchBuilderException | WrongFormatException | UnknownCommandException e) {
+            e.printStackTrace();
+            fail("Did not expect parser to throw exception!");
+        }
+
+        // Assert
+        assertNotNull(configuration);
+        assertEquals(stringVariable1Expected, configuration.getStringVariable1());
+        assertEquals(stringVariable2Expected, configuration.getStringVariable2());
+        assertNull(configuration.getStringVariable3());
+        assertTrue(configuration.isBooleanValue1());
+        assertFalse(configuration.isBooleanValue2());
+        assertEquals(integerValue1Expected, configuration.getIntegerValue1().intValue());
+        assertEquals(integerValue2Expected, configuration.getIntegerValue2().intValue());
+        assertEquals(floatValue1Expected, configuration.getFloatValue1());
+        assertEquals(floatValue2Expected, configuration.getFloatValue2());
+    }
+
+    @Test
     public void shouldReadValuesIntoConfigurationObjectWithPrimitiveTypes() {
         // Arrange
         final GeneralConfigurationBuilder<SimpleConfigurationClassPrimitiveTypes> builder =

@@ -2,6 +2,7 @@ package dk.eSoftware.commandLineParser.generalized.documentation;
 
 import dk.eSoftware.commandLineParser.Configuration;
 import dk.eSoftware.commandLineParser.generalized.annotations.Help;
+import dk.eSoftware.commandLineParser.generalized.annotations.Name;
 
 import java.lang.reflect.Field;
 
@@ -23,7 +24,7 @@ public class HelpUtilities {
                 sb.append("\t");
             }
             String helpString = getHelpString(field);
-            sb.append(field.getName()).append("(").append(field.getType().getSimpleName()).append("): ").append(helpString).append("\n");
+            sb.append(getName(field)).append("(").append(field.getType().getSimpleName()).append("): ").append(helpString).append("\n");
 
             if (Configuration.class.isAssignableFrom(field.getType())) {
                 //noinspection unchecked
@@ -33,6 +34,11 @@ public class HelpUtilities {
         }
 
         return sb.toString();
+    }
+
+    private static String getName(Field field) {
+        final Name annotation = field.getAnnotation(Name.class);
+        return annotation != null ? annotation.name() : field.getName();
     }
 
     private static String getHelpString(Field field) {

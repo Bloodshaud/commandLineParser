@@ -1,15 +1,39 @@
 package dk.eSoftware.commandLineParser.generalized;
 
+import dk.eSoftware.commandLineParser.generalized.annotations.Name;
+
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 class ReflectionWrapper<T> {
     private final Class<T> innerClass;
     private final T object;
+    private final Map<Class<?>, Map<String, Field>> fieldMaps;
 
 
     public ReflectionWrapper(T configuration, Class<T> innerClass) {
         object = configuration;
         this.innerClass = innerClass;
+
+        fieldMaps = new HashMap<>();
+
+        fieldMaps.put(innerClass, buildNameMap(innerClass));
+    }
+
+    private Map<String, Field> buildNameMap(Class<?> innerClass) {
+        final HashMap<String, Field> result = new HashMap<>();
+        for (Field field : innerClass.getDeclaredFields()) {
+
+            result.putIfAbsent(field.getName(), field);
+
+            final Name nameAnnotation = field.getAnnotation(Name.class);
+            if (nameAnnotation != null) {
+                result.put(nameAnnotation.name(), field);
+            }
+
+        }
+        return result;
     }
 
     void writeField(String fieldName, String serializedValue) throws ReflectionException {
@@ -20,9 +44,9 @@ class ReflectionWrapper<T> {
         try {
             if (fieldName.contains(".")) {
                 final String[] split = fieldName.split("\\.", 2);
-                final String currentField = split[0];
+                final String currentFieldName = split[0];
 
-                final Field field = objectClass.getDeclaredField(currentField);
+                final Field field = getField(objectClass, currentFieldName);
                 boolean originallyAccessible = field.isAccessible();
                 field.setAccessible(true);
 
@@ -37,7 +61,7 @@ class ReflectionWrapper<T> {
 
                 field.setAccessible(originallyAccessible);
             } else {
-                final Field field = objectClass.getDeclaredField(fieldName);
+                final Field field = getField(objectClass, fieldName);
                 boolean originallyAccessible = field.isAccessible();
 
                 field.setAccessible(true);
@@ -57,6 +81,16 @@ class ReflectionWrapper<T> {
         } catch (InstantiationException e) {
             throw new ReflectionException("Failed creating a new instance of field type - ensure that they all have zero-args constructors");
         }
+    }
+
+    private Field getField(Class<?> objectClass, String currentFieldName) throws NoSuchFieldException {
+        final Field field = fieldMaps.computeIfAbsent(objectClass, this::buildNameMap).get(currentFieldName);
+
+        if (field == null) {
+            throw new NoSuchFieldException("Found no field with name: '" + currentFieldName + "' in object: '" + objectClass.getSimpleName() + "'");
+        }
+
+        return field;
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
