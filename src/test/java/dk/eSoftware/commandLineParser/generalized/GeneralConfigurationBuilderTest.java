@@ -5,9 +5,8 @@ import dk.eSoftware.commandLineParser.SingletonCommandLineParser;
 import dk.eSoftware.commandLineParser.UnknownCommandException;
 import dk.eSoftware.commandLineParser.WrongFormatException;
 import dk.eSoftware.commandLineParser.generalized.configuratinos.*;
+import dk.eSoftware.commandLineParser.generalized.documentation.HelpUtilities;
 import org.junit.Test;
-
-import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -17,7 +16,7 @@ public class GeneralConfigurationBuilderTest {
     public void shouldReadValuesIntoConfigurationObject() {
         // Arrange
         final GeneralConfigurationBuilder<SimpleConfigurationClassBoxedTypes> builder =
-                new GeneralConfigurationBuilder<>(SimpleConfigurationClassBoxedTypes.class, "HELP");
+                new GeneralConfigurationBuilder<>(SimpleConfigurationClassBoxedTypes.class);
 
         final SingletonCommandLineParser<SimpleConfigurationClassBoxedTypes> parser = new SingletonCommandLineParser<>(builder);
 
@@ -62,7 +61,7 @@ public class GeneralConfigurationBuilderTest {
     public void shouldReadValuesIntoConfigurationObjectWithPrimitiveTypes() {
         // Arrange
         final GeneralConfigurationBuilder<SimpleConfigurationClassPrimitiveTypes> builder =
-                new GeneralConfigurationBuilder<>(SimpleConfigurationClassPrimitiveTypes.class, "HELP");
+                new GeneralConfigurationBuilder<>(SimpleConfigurationClassPrimitiveTypes.class);
 
         final SingletonCommandLineParser<SimpleConfigurationClassPrimitiveTypes> parser = new SingletonCommandLineParser<>(builder);
 
@@ -100,7 +99,7 @@ public class GeneralConfigurationBuilderTest {
     public void shouldThrowExceptionAsMultipleValuesSpecifiedToFieldInDifferentWays() {
         // Arrange
         final GeneralConfigurationBuilder<SimpleConfigurationClassBoxedTypes> builder =
-                new GeneralConfigurationBuilder<>(SimpleConfigurationClassBoxedTypes.class, "HELP");
+                new GeneralConfigurationBuilder<>(SimpleConfigurationClassBoxedTypes.class);
 
         final SingletonCommandLineParser<SimpleConfigurationClassBoxedTypes> parser = new SingletonCommandLineParser<>(builder);
 
@@ -127,7 +126,7 @@ public class GeneralConfigurationBuilderTest {
     public void shouldThrowExceptionAsVariableHasNoValue() {
         // Arrange
         final GeneralConfigurationBuilder<SimpleConfigurationClassBoxedTypes> builder =
-                new GeneralConfigurationBuilder<>(SimpleConfigurationClassBoxedTypes.class, "HELP");
+                new GeneralConfigurationBuilder<>(SimpleConfigurationClassBoxedTypes.class);
 
         final SingletonCommandLineParser<SimpleConfigurationClassBoxedTypes> parser = new SingletonCommandLineParser<>(builder);
 
@@ -153,7 +152,7 @@ public class GeneralConfigurationBuilderTest {
     public void shouldThrowExceptionAsMultipleValuesSpecifiedToFieldCommands() {
         // Arrange
         final GeneralConfigurationBuilder<SimpleConfigurationClassBoxedTypes> builder =
-                new GeneralConfigurationBuilder<>(SimpleConfigurationClassBoxedTypes.class, "HELP");
+                new GeneralConfigurationBuilder<>(SimpleConfigurationClassBoxedTypes.class);
 
         final SingletonCommandLineParser<SimpleConfigurationClassBoxedTypes> parser = new SingletonCommandLineParser<>(builder);
 
@@ -178,7 +177,7 @@ public class GeneralConfigurationBuilderTest {
     public void shouldThrowExceptionAsMultipleValuesSpecifiedToFieldEqualSign() {
         // Arrange
         final GeneralConfigurationBuilder<SimpleConfigurationClassBoxedTypes> builder =
-                new GeneralConfigurationBuilder<>(SimpleConfigurationClassBoxedTypes.class, "HELP");
+                new GeneralConfigurationBuilder<>(SimpleConfigurationClassBoxedTypes.class);
 
         final SingletonCommandLineParser<SimpleConfigurationClassBoxedTypes> parser = new SingletonCommandLineParser<>(builder);
 
@@ -203,7 +202,7 @@ public class GeneralConfigurationBuilderTest {
     public void shouldThrowExceptionAsMultipleEqualSignsOccurs() {
         // Arrange
         final GeneralConfigurationBuilder<SimpleConfigurationClassBoxedTypes> builder =
-                new GeneralConfigurationBuilder<>(SimpleConfigurationClassBoxedTypes.class, "HELP");
+                new GeneralConfigurationBuilder<>(SimpleConfigurationClassBoxedTypes.class);
 
         final SingletonCommandLineParser<SimpleConfigurationClassBoxedTypes> parser = new SingletonCommandLineParser<>(builder);
 
@@ -227,7 +226,7 @@ public class GeneralConfigurationBuilderTest {
     public void shouldWriteValuesToLayeredConfiguration() {
         // Arrange
         final GeneralConfigurationBuilder<ComplexConfiguration> builder =
-                new GeneralConfigurationBuilder<>(ComplexConfiguration.class, "HELP");
+                new GeneralConfigurationBuilder<>(ComplexConfiguration.class);
 
         final SingletonCommandLineParser<ComplexConfiguration> parser = new SingletonCommandLineParser<>(builder);
 
@@ -251,7 +250,7 @@ public class GeneralConfigurationBuilderTest {
     public void shouldWriteValuesToDeeplyLayeredConfiguration() {
         // Arrange
         final GeneralConfigurationBuilder<TwoLayerComplexConfiguration> builder =
-                new GeneralConfigurationBuilder<>(TwoLayerComplexConfiguration.class, "HELP");
+                new GeneralConfigurationBuilder<>(TwoLayerComplexConfiguration.class);
 
         final SingletonCommandLineParser<TwoLayerComplexConfiguration> parser = new SingletonCommandLineParser<>(builder);
 
@@ -277,7 +276,7 @@ public class GeneralConfigurationBuilderTest {
     public void shouldThrowExceptionAsSpecifiedParameterIsUnknown() {
         // Arrange
         final GeneralConfigurationBuilder<PrimitiveLongOnlyConfiguration> builder =
-                new GeneralConfigurationBuilder<>(PrimitiveLongOnlyConfiguration.class, "HELP");
+                new GeneralConfigurationBuilder<>(PrimitiveLongOnlyConfiguration.class);
 
         final SingletonCommandLineParser<PrimitiveLongOnlyConfiguration> parser = new SingletonCommandLineParser<>(builder);
 
@@ -298,7 +297,7 @@ public class GeneralConfigurationBuilderTest {
     public void shouldThrowExceptionAsSpecifiedParameterIsOfUnsupportedType() {
         // Arrange
         final GeneralConfigurationBuilder<PrimitiveLongOnlyConfiguration> builder =
-                new GeneralConfigurationBuilder<>(PrimitiveLongOnlyConfiguration.class, "HELP");
+                new GeneralConfigurationBuilder<>(PrimitiveLongOnlyConfiguration.class);
 
         final SingletonCommandLineParser<PrimitiveLongOnlyConfiguration> parser = new SingletonCommandLineParser<>(builder);
 
@@ -316,22 +315,19 @@ public class GeneralConfigurationBuilderTest {
     }
 
     @Test
-    public void shouldReturnGivenHelpString() {
-        final String helpString = UUID.randomUUID().toString();
+    public void shouldReturnHelpStringGeneratedFromSpecifiedClass() {
 
         final GeneralConfigurationBuilder<SimpleConfigurationClassPrimitiveTypes> builder = new GeneralConfigurationBuilder<>(
-                SimpleConfigurationClassPrimitiveTypes.class,
-                helpString
+                SimpleConfigurationClassPrimitiveTypes.class
         );
 
-        assertEquals(helpString, builder.help());
+        assertEquals(HelpUtilities.generateHelpString(SimpleConfigurationClassPrimitiveTypes.class), builder.help());
     }
 
     @Test(expected = RuntimeException.class)
     public void shouldThrowExceptionAsUnableToInstantiate() {
         new GeneralConfigurationBuilder<>(
-                ConfigurationWithoutDefaultConstructor.class,
-                "HELP!"
+                ConfigurationWithoutDefaultConstructor.class
         );
     }
 }

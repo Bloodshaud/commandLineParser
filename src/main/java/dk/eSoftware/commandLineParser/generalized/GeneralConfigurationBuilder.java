@@ -3,16 +3,15 @@ package dk.eSoftware.commandLineParser.generalized;
 import dk.eSoftware.commandLineParser.CommandLineParser;
 import dk.eSoftware.commandLineParser.Configuration;
 import dk.eSoftware.commandLineParser.UnknownCommandException;
+import dk.eSoftware.commandLineParser.generalized.documentation.HelpUtilities;
 
 public class GeneralConfigurationBuilder<T extends Configuration> implements CommandLineParser.ConfigBuilder<T> {
 
     private final Class<T> configurationClass;
     private final ReflectionWrapper<T> wrapper;
-    private final String helpString;
 
-    public GeneralConfigurationBuilder(Class<T> configurationClass, String helpString) {
+    public GeneralConfigurationBuilder(Class<T> configurationClass) {
         this.configurationClass = configurationClass;
-        this.helpString = helpString;
         try {
             T configuration = configurationClass.newInstance();
 
@@ -73,6 +72,6 @@ public class GeneralConfigurationBuilder<T extends Configuration> implements Com
 
     @Override
     public String help() {
-        return helpString;
+        return HelpUtilities.generateHelpString(configurationClass);
     }
 }
