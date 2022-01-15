@@ -144,4 +144,73 @@ public class ReflectionWrapperTest {
         assertEquals("someValue", object.getStringValue());
         assertEquals(TestingEnum.VALUE2, object.getEnumValue());
     }
+
+    @Test
+    public void shouldWriteValuesToLayeredConfiguration() {
+        // Arrange
+        final ReflectionWrapper<ComplexConfiguration> wrapper = new ReflectionWrapper<>(
+                new ComplexConfiguration(),
+                ComplexConfiguration.class
+        );
+
+        // Act
+        try {
+            wrapper.writeField("outerValue", "1231");
+            wrapper.writeField("inner.booleanValue1", "true");
+            wrapper.writeField("inner.integerValue2", "13");
+        } catch (ReflectionException exception) {
+            exception.printStackTrace();
+            fail();
+        }
+
+        final ComplexConfiguration configuration = wrapper.getObject();
+
+        // Assert
+        assertEquals(configuration.getOuterValue(), "1231");
+        assertTrue(configuration.getInner().isBooleanValue1());
+        assertEquals(configuration.getInner().getIntegerValue2(), 13);
+    }
+
+    @Test
+    public void shouldWriteValuesToDeeplyLayeredConfiguration() {
+        // Arrange
+        final ReflectionWrapper<TwoLayerComplexConfiguration> wrapper = new ReflectionWrapper<>(
+                new TwoLayerComplexConfiguration(),
+                TwoLayerComplexConfiguration.class
+        );
+
+        // Act
+        try {
+            wrapper.writeField("complexConfiguration.inner.booleanValue1","true");
+            wrapper.writeField("complexConfiguration.inner.integerValue1","12");
+            wrapper.writeField("stringValue","Something");
+        } catch (ReflectionException exception) {
+            exception.printStackTrace();
+            fail();
+        }
+
+        final TwoLayerComplexConfiguration config = wrapper.getObject();
+
+        // Assert
+        assertEquals(config.getStringValue(), "Something");
+        assertTrue(config.getComplexConfiguration().getInner().isBooleanValue1());
+        assertEquals(config.getComplexConfiguration().getInner().getIntegerValue1(), 12);
+    }
+
+    @Test
+    public void shouldThrowExceptionAsInnerClassHasNoDefaultConstructor() {
+        // Arrange
+        final ReflectionWrapper<ConfigurationWithInnerWithoutDefaultConstructor> wrapper = new ReflectionWrapper<>(
+                new ConfigurationWithInnerWithoutDefaultConstructor(),
+                ConfigurationWithInnerWithoutDefaultConstructor.class
+        );
+
+        // Act
+        try {
+            wrapper.writeField("stringValue","Something");
+            wrapper.writeField("inner.value","true");
+            fail();
+        } catch (ReflectionException expected) {
+        }
+    }
 }

@@ -198,24 +198,53 @@ public class GeneralConfigurationBuilderTest {
     }
 
     @Test
-    public void shouldThrowExceptionAsConfigurationHasUnsupportedType() {
+    public void shouldWriteValuesToLayeredConfiguration() {
         // Arrange
         final GeneralConfigurationBuilder<ComplexConfiguration> builder =
                 new GeneralConfigurationBuilder<>(ComplexConfiguration.class, "HELP");
 
         final SingletonCommandLineParser<ComplexConfiguration> parser = new SingletonCommandLineParser<>(builder);
 
+        ComplexConfiguration configuration = null;
         // Act
         try {
-            parser.parse(("--outerValue=1231 --inner=value").split(" ")
+            configuration = parser.parse(("--outerValue=1231 --inner.booleanValue1=false --inner.integerValue1 -13").split(" ")
             );
-            fail("Should have thrown exception");
-        } catch (FieldMappingException expected) {
-
         } catch (NoSuchBuilderException | WrongFormatException | UnknownCommandException e) {
             e.printStackTrace();
             fail("Did not expect parser to throw exception!");
         }
+
+        // Assert
+        assertEquals(configuration.getOuterValue(), "1231");
+        assertFalse(configuration.getInner().isBooleanValue1());
+        assertEquals(configuration.getInner().getIntegerValue1(), 13);
+    }
+
+    @Test
+    public void shouldWriteValuesToDeeplyLayeredConfiguration() {
+        // Arrange
+        final GeneralConfigurationBuilder<TwoLayerComplexConfiguration> builder =
+                new GeneralConfigurationBuilder<>(TwoLayerComplexConfiguration.class, "HELP");
+
+        final SingletonCommandLineParser<TwoLayerComplexConfiguration> parser = new SingletonCommandLineParser<>(builder);
+
+        TwoLayerComplexConfiguration config = null;
+
+        // Act
+        try {
+            config = parser.parse(("--complexConfiguration.inner.booleanValue1=true " +
+                    "--complexConfiguration.inner.integerValue1 -12 --stringValue -Something").split(" ")
+            );
+        } catch (NoSuchBuilderException | WrongFormatException | UnknownCommandException e) {
+            e.printStackTrace();
+            fail("Did not expect parser to throw exception!");
+        }
+
+        // Assert
+        assertEquals(config.getStringValue(), "Something");
+        assertTrue(config.getComplexConfiguration().getInner().isBooleanValue1());
+        assertEquals(config.getComplexConfiguration().getInner().getIntegerValue1(), 12);
     }
 
     @Test
@@ -238,6 +267,7 @@ public class GeneralConfigurationBuilderTest {
             fail("Did not expect parser to throw exception!");
         }
     }
+
     @Test
     public void shouldThrowExceptionAsSpecifiedParameterIsOfUnsupportedType() {
         // Arrange

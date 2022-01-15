@@ -13,29 +13,54 @@ class ReflectionWrapper<T> {
     }
 
     void writeField(String fieldName, String serializedValue) throws ReflectionException {
+        writeFieldInner(fieldName, serializedValue, innerClass, object);
+    }
+
+    private void writeFieldInner(String fieldName, String serializedValue, Class<?> objectClass, Object object) throws ReflectionException {
         try {
-            final Field field = innerClass.getDeclaredField(fieldName);
-            boolean originallyAccessible = field.isAccessible();
+            if (fieldName.contains(".")) {
+                final String[] split = fieldName.split("\\.", 2);
+                final String currentField = split[0];
 
-            field.setAccessible(true);
+                final Field field = objectClass.getDeclaredField(currentField);
+                boolean originallyAccessible = field.isAccessible();
+                field.setAccessible(true);
 
-            final Class<?> type = field.getType();
+                Object fieldObject = field.get(object);
+                final Class<?> fieldType = field.getType();
+                if (fieldObject == null) {
+                    fieldObject = fieldType.newInstance();
+                    field.set(object, fieldObject);
+                }
 
-            if (type.isPrimitive()) {
-                writePrimitiveType(type, field, serializedValue);
+                writeFieldInner(split[1], serializedValue, fieldType, fieldObject);
+
+                field.setAccessible(originallyAccessible);
             } else {
-                writeComplex(field, type, serializedValue);
+                final Field field = objectClass.getDeclaredField(fieldName);
+                boolean originallyAccessible = field.isAccessible();
+
+                field.setAccessible(true);
+
+                final Class<?> type = field.getType();
+
+                if (type.isPrimitive()) {
+                    writePrimitiveType(type, object, field, serializedValue);
+                } else {
+                    writeComplex(type, object, field, serializedValue);
+                }
+
+                field.setAccessible(originallyAccessible);
             }
-
-            field.setAccessible(originallyAccessible);
         } catch (NoSuchFieldException | IllegalAccessException | NumberFormatException e) {
-            throw new ReflectionException("Failed writing field: " + fieldName + " to class: " + innerClass.getSimpleName());
+            throw new ReflectionException("Failed writing field: " + fieldName + " to class: " + objectClass.getSimpleName());
+        } catch (InstantiationException e) {
+            throw new ReflectionException("Failed creating a new instance of field type - ensure that they all have zero-args constructors");
         }
-
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private void writeComplex(Field field, Class<?> type, String value) throws IllegalAccessException, ReflectionException {
+    private <I> void writeComplex(Class<?> type, I object, Field field, String value) throws IllegalAccessException, ReflectionException {
         if (String.class.equals(type)) {
             field.set(object, value);
         } else if (Boolean.class.equals(type)) {
@@ -45,14 +70,14 @@ class ReflectionWrapper<T> {
         } else if (Float.class.equals(type)) {
             field.set(object, Float.parseFloat(value));
         } else if (type.isEnum()) {
-            field.set(object, Enum.valueOf((Class<Enum>)type, value));
+            field.set(object, Enum.valueOf((Class<Enum>) type, value));
         } else {
-            throw new ReflectionException("Failed writing field: " + field + " to class: " + innerClass.getSimpleName()
+            throw new ReflectionException("Failed writing field: " + field + " to class: " + type.getSimpleName()
                     + " type " + type + " was unsupported");
         }
     }
 
-    private void writePrimitiveType(Class<?> type, Field field, String value) throws IllegalAccessException, ReflectionException {
+    private <I> void writePrimitiveType(Class<?> type, I object, Field field, String value) throws IllegalAccessException, ReflectionException {
         if (Boolean.TYPE.equals(type)) {
             field.setBoolean(object, Boolean.parseBoolean(value));
         } else if (Integer.TYPE.equals(type)) {
@@ -60,7 +85,7 @@ class ReflectionWrapper<T> {
         } else if (Float.TYPE.equals(type)) {
             field.setFloat(object, Float.parseFloat(value));
         } else {
-            throw new ReflectionException("Failed writing field: " + value + " to class: " + innerClass.getSimpleName() + " type " + type + " was unsupported");
+            throw new ReflectionException("Failed writing field: " + value + " to class: " + type.getSimpleName() + " type " + type + " was unsupported");
         }
     }
 
