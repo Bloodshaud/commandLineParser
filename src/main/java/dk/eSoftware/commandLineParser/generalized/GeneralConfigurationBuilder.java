@@ -16,7 +16,7 @@ public class GeneralConfigurationBuilder<T extends Configuration> implements Com
         try {
             T configuration = configurationClass.newInstance();
 
-            wrapper = new ReflectionWrapper<T>(configuration, configurationClass);
+            wrapper = new ReflectionWrapper<>(configuration, configurationClass);
         } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(
                     "Failed to instantiate new instance of class: " + configurationClass.getSimpleName()
