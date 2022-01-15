@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import static org.junit.Assert.*;
 
-public class CommandValuePairTest {
+public class FieldValuePairTest {
 
     @Test
     public void toStringShouldContainValues() {
@@ -14,7 +14,7 @@ public class CommandValuePairTest {
         final String commandString = UUID.randomUUID().toString();
         final String value = UUID.randomUUID().toString();
 
-        final CommandValuePair command = new CommandValuePair(commandString, value);
+        final FieldValuePair command = new FieldValuePair(commandString, value);
 
         // Act
         final String toString = command.toString();

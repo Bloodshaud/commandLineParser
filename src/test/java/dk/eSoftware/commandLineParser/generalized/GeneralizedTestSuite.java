@@ -5,8 +5,9 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        CommandValuePairTest.class,
+        FieldValuePairTest.class,
         GeneralConfigurationBuilderTest.class,
+        ReflectionWrapperTest.class,
 })
 public class GeneralizedTestSuite {
 }
