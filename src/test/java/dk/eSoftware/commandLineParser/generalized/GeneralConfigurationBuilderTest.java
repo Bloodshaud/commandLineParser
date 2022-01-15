@@ -110,7 +110,7 @@ public class GeneralConfigurationBuilderTest {
         // Act
         try {
             parser.parse((
-                            "--stringVariable1 -" + stringVariable1Expected + " -" + stringVariable1Expected +
+                            "--stringVariable1=" + stringVariable1Expected + " -" + stringVariable1Expected +
                                     " --stringVariable2 -" + stringVariable2Expected
                     ).split(" ")
             );

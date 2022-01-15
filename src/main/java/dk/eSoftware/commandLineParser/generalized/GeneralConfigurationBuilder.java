@@ -38,22 +38,31 @@ public class GeneralConfigurationBuilder<T extends Configuration> implements Com
     private FieldValuePair convertToValuePair(CommandLineParser.Command command) throws FieldMappingException {
         final String commandString = command.getCommand();
 
-        if (commandString.contains("=") && command.getParams().isEmpty()) {
-            final String[] split = commandString.split("=");
+        if (commandString.contains("=")) {
+            if (command.getParams().isEmpty()) {
+                final String[] split = commandString.split("=");
 
-            if (split.length == 2) {
-                return new FieldValuePair(split[0], split[1]);
+                if (split.length == 2) {
+                    return new FieldValuePair(split[0], split[1]);
+                } else {
+                    throw new FieldMappingException(
+                            "When using '=' there must only be a single occurrence"
+                    );
+                }
+
             } else {
                 throw new FieldMappingException(
-                        "When using '=' there must only be a single occurrence"
+                        "When using '=' a value cannot be specified with '-value' as well"
                 );
             }
-
-        } else if (!commandString.contains("=") && command.getParams().size() == 1) {
-            return new FieldValuePair(commandString, command.getParams().get(0));
         } else {
-            throw new FieldMappingException("Failed to map command " + commandString +
-                    " to a field, must have exactly one specified value");
+            if (command.getParams().size() == 1) {
+                return new FieldValuePair(commandString, command.getParams().get(0));
+            } else {
+                throw new FieldMappingException("Failed to map command " + commandString +
+                        " to a field, must have exactly one specified value");
+
+            }
         }
     }
 
