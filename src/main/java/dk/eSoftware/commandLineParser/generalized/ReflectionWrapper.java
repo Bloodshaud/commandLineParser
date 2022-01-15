@@ -21,7 +21,7 @@ class ReflectionWrapper<T> {
 
             final Class<?> type = field.getType();
 
-            if(type.isPrimitive()){
+            if (type.isPrimitive()) {
                 writePrimitiveType(type, field, serializedValue);
             } else {
                 writeComplex(field, type, serializedValue);
@@ -34,6 +34,7 @@ class ReflectionWrapper<T> {
 
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void writeComplex(Field field, Class<?> type, String value) throws IllegalAccessException, ReflectionException {
         if (String.class.equals(type)) {
             field.set(object, value);
@@ -43,8 +44,11 @@ class ReflectionWrapper<T> {
             field.set(object, Integer.parseInt(value));
         } else if (Float.class.equals(type)) {
             field.set(object, Float.parseFloat(value));
+        } else if (type.isEnum()) {
+            field.set(object, Enum.valueOf((Class<Enum>)type, value));
         } else {
-            throw new ReflectionException("Failed writing field: " + field + " to class: " + innerClass.getSimpleName() + " type " + type + " was unsupported");
+            throw new ReflectionException("Failed writing field: " + field + " to class: " + innerClass.getSimpleName()
+                    + " type " + type + " was unsupported");
         }
     }
 
@@ -60,7 +64,7 @@ class ReflectionWrapper<T> {
         }
     }
 
-    public T getObject(){
+    public T getObject() {
         return object;
     }
 }

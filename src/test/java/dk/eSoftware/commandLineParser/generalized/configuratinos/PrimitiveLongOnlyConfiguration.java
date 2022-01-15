@@ -1,4 +1,4 @@
-package dk.eSoftware.commandLineParser.generalized;
+package dk.eSoftware.commandLineParser.generalized.configuratinos;
 
 import dk.eSoftware.commandLineParser.Configuration;
 

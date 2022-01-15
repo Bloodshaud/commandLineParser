@@ -1,9 +1,9 @@
-package dk.eSoftware.commandLineParser.generalized;
+package dk.eSoftware.commandLineParser.generalized.configuratinos;
 
 import dk.eSoftware.commandLineParser.Configuration;
 
 @SuppressWarnings("unused")
-class SimpleConfigurationClassPrimitiveTypes implements Configuration {
+public class SimpleConfigurationClassPrimitiveTypes implements Configuration {
     private boolean booleanValue1;
     private boolean booleanValue2;
     private int integerValue1;

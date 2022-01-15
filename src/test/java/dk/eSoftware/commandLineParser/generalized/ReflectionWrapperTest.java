@@ -1,5 +1,6 @@
 package dk.eSoftware.commandLineParser.generalized;
 
+import dk.eSoftware.commandLineParser.generalized.configuratinos.*;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -118,5 +119,29 @@ public class ReflectionWrapperTest {
             fail("Expected exception");
         } catch (ReflectionException expected) {
         }
+    }
+
+    @Test
+    public void shouldLoadConfigurationWithEnum() {
+        // Arrange
+        final ReflectionWrapper<ConfigurationWithEnum> wrapper = new ReflectionWrapper<>(
+                new ConfigurationWithEnum(),
+                ConfigurationWithEnum.class
+        );
+
+        // Act
+        try {
+            wrapper.writeField("stringValue", "someValue");
+            wrapper.writeField("enumValue", "VALUE2");
+        } catch (ReflectionException e) {
+            e.printStackTrace();
+            fail("Should not throw exception");
+        }
+
+        final ConfigurationWithEnum object = wrapper.getObject();
+
+        // Assert
+        assertEquals("someValue", object.getStringValue());
+        assertEquals(TestingEnum.VALUE2, object.getEnumValue());
     }
 }

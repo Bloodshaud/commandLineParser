@@ -1,9 +1,9 @@
-package dk.eSoftware.commandLineParser.generalized;
+package dk.eSoftware.commandLineParser.generalized.configuratinos;
 
 import dk.eSoftware.commandLineParser.Configuration;
 
 @SuppressWarnings("unused")
-class SimpleConfigurationClassBoxedTypes implements Configuration {
+public class SimpleConfigurationClassBoxedTypes implements Configuration {
     private String stringVariable1;
     private String stringVariable2;
     private String stringVariable3;

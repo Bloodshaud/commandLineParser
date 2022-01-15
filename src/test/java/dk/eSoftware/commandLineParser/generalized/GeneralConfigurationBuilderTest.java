@@ -4,6 +4,7 @@ import dk.eSoftware.commandLineParser.NoSuchBuilderException;
 import dk.eSoftware.commandLineParser.SingletonCommandLineParser;
 import dk.eSoftware.commandLineParser.UnknownCommandException;
 import dk.eSoftware.commandLineParser.WrongFormatException;
+import dk.eSoftware.commandLineParser.generalized.configuratinos.*;
 import org.junit.Test;
 
 import java.util.UUID;
