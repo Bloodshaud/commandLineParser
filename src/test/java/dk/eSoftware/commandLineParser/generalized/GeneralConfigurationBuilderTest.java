@@ -124,6 +124,32 @@ public class GeneralConfigurationBuilderTest {
     }
 
     @Test
+    public void shouldThrowExceptionAsVariableHasNoValue() {
+        // Arrange
+        final GeneralConfigurationBuilder<SimpleConfigurationClassBoxedTypes> builder =
+                new GeneralConfigurationBuilder<>(SimpleConfigurationClassBoxedTypes.class, "HELP");
+
+        final SingletonCommandLineParser<SimpleConfigurationClassBoxedTypes> parser = new SingletonCommandLineParser<>(builder);
+
+        String stringVariable2Expected = "alsoTest";
+
+        // Act
+        try {
+            parser.parse((
+                            "--stringVariable1 --stringVariable2 -" + stringVariable2Expected
+                    ).split(" ")
+            );
+            fail("Should have thrown exception");
+        } catch (NoSuchBuilderException | WrongFormatException e) {
+            e.printStackTrace();
+            fail("Did not expect parser to throw exception!");
+        } catch (UnknownCommandException expected) {
+
+        }
+    }
+
+
+    @Test
     public void shouldThrowExceptionAsMultipleValuesSpecifiedToFieldCommands() {
         // Arrange
         final GeneralConfigurationBuilder<SimpleConfigurationClassBoxedTypes> builder =
