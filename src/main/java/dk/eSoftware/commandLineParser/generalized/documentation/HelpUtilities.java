@@ -5,6 +5,10 @@ import dk.eSoftware.commandLineParser.generalized.annotations.Help;
 
 import java.lang.reflect.Field;
 
+/**
+ * Utility class for generating a CLI-friendly help-string from an annotated implementation of the
+ * {@link Configuration} interface
+ */
 public class HelpUtilities {
 
     public static String generateHelpString(Class<? extends Configuration> subjectClass) {
