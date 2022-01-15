@@ -13,7 +13,7 @@ public class SingletonCommandLineParser<T extends Configuration> extends Command
     }
 
     @Override
-    public T parse(String[] input) throws NoSuchBuilderException, WrongFormatException {
+    public T parse(String[] input) throws NoSuchBuilderException, WrongFormatException, UnknownCommandException {
         return super.parse(input);
     }
 

@@ -22,7 +22,7 @@ public abstract class CommandLineParser<T extends Configuration> {
      * @param input the string array to be parsed
      * @return null if input is null or empty - otherwise a {@link Configuration} created by the assigned {@link ConfigBuilder}
      */
-    public T parse(String[] input) throws NoSuchBuilderException, WrongFormatException {
+    public T parse(String[] input) throws NoSuchBuilderException, WrongFormatException, UnknownCommandException {
         String firstParam;
         if (input == null || input.length == 0) {
             firstParam = null;
@@ -46,7 +46,7 @@ public abstract class CommandLineParser<T extends Configuration> {
      */
     protected abstract ConfigBuilder<? extends T> getConfigBuilder(String firstParam) throws NoSuchBuilderException;
 
-    private void doParse(String[] s, ConfigBuilder<?> configBuilder) throws WrongFormatException {
+    private void doParse(String[] s, ConfigBuilder<?> configBuilder) throws WrongFormatException, UnknownCommandException {
         if (s == null || s.length == 0) {
             return;
         }
@@ -86,7 +86,7 @@ public abstract class CommandLineParser<T extends Configuration> {
          *
          * @param command command to apply
          */
-        void applyCommand(Command command);
+        void applyCommand(Command command) throws UnknownCommandException;
 
         /**
          * Builds configuration from current state
