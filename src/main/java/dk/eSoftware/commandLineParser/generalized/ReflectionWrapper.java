@@ -1,8 +1,11 @@
 package dk.eSoftware.commandLineParser.generalized;
 
+import dk.eSoftware.commandLineParser.generalized.annotations.MapConfiguration;
 import dk.eSoftware.commandLineParser.generalized.annotations.Name;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,12 +55,17 @@ class ReflectionWrapper<T> {
 
                 Object fieldObject = field.get(object);
                 final Class<?> fieldType = field.getType();
-                if (fieldObject == null) {
-                    fieldObject = fieldType.newInstance();
-                    field.set(object, fieldObject);
-                }
 
-                writeFieldInner(split[1], serializedValue, fieldType, fieldObject);
+                if (Map.class.isAssignableFrom(fieldType)) {
+                    field.set(object, handleMap(field, fieldObject, split[1], serializedValue));
+                } else {
+                    if (fieldObject == null) {
+                        fieldObject = fieldType.newInstance();
+                        field.set(object, fieldObject);
+                    }
+
+                    writeFieldInner(split[1], serializedValue, fieldType, fieldObject);
+                }
 
                 field.setAccessible(originallyAccessible);
             } else {
@@ -76,11 +84,41 @@ class ReflectionWrapper<T> {
 
                 field.setAccessible(originallyAccessible);
             }
-        } catch (NoSuchFieldException | IllegalAccessException | NumberFormatException e) {
+        } catch (NoSuchFieldException | IllegalAccessException | NumberFormatException | NoSuchMethodException | InvocationTargetException e) {
             throw new ReflectionException("Failed writing field: " + fieldName + " to class: " + objectClass.getSimpleName());
         } catch (InstantiationException e) {
             throw new ReflectionException("Failed creating a new instance of field type - ensure that they all have zero-args constructors");
         }
+    }
+
+    private Object handleMap(Field field, Object fieldObject, String serializedKey, String serializedValue)
+            throws ReflectionException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        final MapConfiguration mapAnnotation = getMapConfiguration(field);
+
+        //noinspection rawtypes
+        final Class<? extends Map> mapClass = mapAnnotation.mapClass();
+        if (fieldObject == null) {
+            fieldObject = mapClass.newInstance();
+        }
+
+        final Method put = mapClass.getMethod("put", Object.class, Object.class);
+
+        put.invoke(
+                fieldObject,
+                deserializedComplex(mapAnnotation.keyClass(), serializedKey, "Map: " + serializedKey),
+                deserializedComplex(mapAnnotation.valueClass(), serializedValue, "Map: " + serializedKey)
+        );
+
+        return fieldObject;
+    }
+
+    private MapConfiguration getMapConfiguration(Field field) throws ReflectionException {
+        final MapConfiguration mapAnnotation = field.getAnnotation(MapConfiguration.class);
+
+        if (mapAnnotation == null) {
+            throw new ReflectionException("Usage of Map requires usage of the MapConfiguration annotation");
+        }
+        return mapAnnotation;
     }
 
     private Field getField(Class<?> objectClass, String currentFieldName) throws NoSuchFieldException {
@@ -93,18 +131,22 @@ class ReflectionWrapper<T> {
         return field;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     private <I> void writeComplex(Class<?> type, I object, Field field, String value) throws IllegalAccessException, ReflectionException {
+        field.set(object, deserializedComplex(type, value, field.getName()));
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private Object deserializedComplex(Class<?> type, String value, String field) throws ReflectionException {
         if (String.class.equals(type)) {
-            field.set(object, value);
+            return value;
         } else if (Boolean.class.equals(type)) {
-            field.set(object, Boolean.parseBoolean(value));
+            return Boolean.parseBoolean(value);
         } else if (Integer.class.equals(type)) {
-            field.set(object, Integer.parseInt(value));
+            return Integer.parseInt(value);
         } else if (Float.class.equals(type)) {
-            field.set(object, Float.parseFloat(value));
+            return Float.parseFloat(value);
         } else if (type.isEnum()) {
-            field.set(object, Enum.valueOf((Class<Enum>) type, value));
+            return Enum.valueOf((Class<Enum>) type, value);
         } else {
             throw new ReflectionException("Failed writing field: " + field + " to class: " + type.getSimpleName()
                     + " type " + type + " was unsupported");

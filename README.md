@@ -14,11 +14,11 @@ then to produce a ``` Configuration ``` from the given arguments, which are give
 
 CommandLineParser can be retrieved with maven by adding the following to the POM:
 
-```
+```xml
 <dependency>
     <groupId>dk.e-software</groupId>
     <artifactId>commandLineParser</artifactId>
-    <version>1.2.0</version>
+    <version>2.1.0</version>
 </dependency>
 
 ```
