@@ -213,4 +213,43 @@ public class ReflectionWrapperTest {
         } catch (ReflectionException expected) {
         }
     }
+
+    @Test
+    public void shouldThrowExceptionAsMapHasNoAnnotation(){
+        // Arrange
+        final ReflectionWrapper<ConfigurationWithMapUnAnnotated> wrapper = new ReflectionWrapper<>(
+                new ConfigurationWithMapUnAnnotated(),
+                ConfigurationWithMapUnAnnotated.class
+        );
+
+        // Act
+        try {
+            wrapper.writeField("map.key","1");
+            wrapper.writeField("map.key2","22");
+            fail();
+        } catch (ReflectionException expected) {
+        }
+    }
+
+    @Test
+    public void shouldWriteValuesToMap(){
+        // Arrange
+        final ReflectionWrapper<ConfigurationWithMap> wrapper = new ReflectionWrapper<>(
+                new ConfigurationWithMap(),
+                ConfigurationWithMap.class
+        );
+
+        // Act
+        try {
+            wrapper.writeField("map.key","1");
+            wrapper.writeField("map.key2","22");
+        } catch (ReflectionException expected) {
+        }
+
+        // Assert
+        final ConfigurationWithMap conf = wrapper.getObject();
+        assertNotNull(conf.getMap());
+        assertEquals(1, conf.getMap().get("key").intValue());
+        assertEquals(22, conf.getMap().get("key2").intValue());
+    }
 }

@@ -8,6 +8,8 @@ import dk.eSoftware.commandLineParser.generalized.configuratinos.*;
 import dk.eSoftware.commandLineParser.generalized.documentation.HelpUtilities;
 import org.junit.Test;
 
+import java.util.Map;
+
 import static org.junit.Assert.*;
 
 public class GeneralConfigurationBuilderTest {
@@ -138,6 +140,39 @@ public class GeneralConfigurationBuilderTest {
         assertEquals(integerValue2Expected, configuration.getIntegerValue2());
         assertEquals(floatValue1Expected, configuration.getFloatValue1(), .001f);
         assertEquals(floatValue2Expected, configuration.getFloatValue2(), .001f);
+    }
+
+    @Test
+    public void shouldReadValuesIntoConfigurationObjectWithMap() {
+        // Arrange
+        final GeneralConfigurationBuilder<ConfigurationWithMap> builder =
+                new GeneralConfigurationBuilder<>(ConfigurationWithMap.class);
+
+        final SingletonCommandLineParser<ConfigurationWithMap> parser = new SingletonCommandLineParser<>(builder);
+
+        String stringVariable1Expected = "heheTest";
+
+        // Act
+        ConfigurationWithMap configuration = null;
+        try {
+            configuration = parser.parse((
+                            "--val=" + stringVariable1Expected + " " +
+                                    "--map.key1=1 " +
+                                    "--map.key2 -12 "
+                    ).split(" ")
+            );
+        } catch (NoSuchBuilderException | WrongFormatException | UnknownCommandException e) {
+            e.printStackTrace();
+            fail("Did not expect parser to throw exception!");
+        }
+
+        // Assert
+        assertNotNull(configuration);
+        assertEquals(stringVariable1Expected, configuration.getOtherValue());
+        final Map<String, Integer> map = configuration.getMap();
+        assertNotNull(map);
+        assertEquals(1, map.get("key1").intValue());
+        assertEquals(12, map.get("key2").intValue());
     }
 
     @Test
