@@ -410,4 +410,25 @@ public class GeneralConfigurationBuilderTest {
                 ConfigurationWithoutDefaultConstructor.class
         );
     }
+
+    @Test
+    public void shouldOmitStaticField() {
+        // Arrange
+        final GeneralConfigurationBuilder<ConfigurationWithStaticField> builder =
+                new GeneralConfigurationBuilder<>(ConfigurationWithStaticField.class);
+
+        final SingletonCommandLineParser<ConfigurationWithStaticField> parser = new SingletonCommandLineParser<>(builder);
+
+        // Act
+
+        try {
+            parser.parse(("--staticString=value").split(" "));
+            fail("Should have thrown exception");
+        } catch (FieldMappingException expected) {
+
+        } catch (NoSuchBuilderException | WrongFormatException | UnknownCommandException e) {
+            e.printStackTrace();
+            fail("Did not expect parser to throw exception!");
+        }
+    }
 }

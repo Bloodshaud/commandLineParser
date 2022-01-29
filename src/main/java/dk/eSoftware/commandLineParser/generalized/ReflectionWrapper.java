@@ -6,6 +6,7 @@ import dk.eSoftware.commandLineParser.generalized.annotations.Name;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,6 +71,13 @@ class ReflectionWrapper<T> {
                 field.setAccessible(originallyAccessible);
             } else {
                 final Field field = getField(objectClass, fieldName);
+
+                if (Modifier.isStatic(field.getModifiers())) {
+                    throw new ReflectionException(
+                            "Unable to write value to static field '" + fieldName + "' in class: '" + objectClass.getSimpleName() + "'"
+                    );
+                }
+
                 boolean originallyAccessible = field.isAccessible();
 
                 field.setAccessible(true);
