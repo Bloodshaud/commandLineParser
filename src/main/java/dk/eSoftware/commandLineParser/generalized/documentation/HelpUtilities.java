@@ -5,6 +5,7 @@ import dk.eSoftware.commandLineParser.generalized.annotations.Help;
 import dk.eSoftware.commandLineParser.generalized.annotations.Name;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 /**
  * Utility class for generating a CLI-friendly help-string from an annotated implementation of the
@@ -20,6 +21,10 @@ public class HelpUtilities {
         final StringBuilder sb = new StringBuilder();
 
         for (Field field : subjectClass.getDeclaredFields()) {
+            if(Modifier.isStatic(field.getModifiers())){
+                continue;
+            }
+
             for (int i = 0; i < level; i++) {
                 sb.append("\t");
             }
