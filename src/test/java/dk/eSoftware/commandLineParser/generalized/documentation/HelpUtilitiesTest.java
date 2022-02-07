@@ -1,9 +1,11 @@
 package dk.eSoftware.commandLineParser.generalized.documentation;
 
 import dk.eSoftware.commandLineParser.generalized.configuratinos.ComplexConfigurationPartlyAnnotated;
+import dk.eSoftware.commandLineParser.generalized.configuratinos.ConfigurationWithStaticField;
 import dk.eSoftware.commandLineParser.generalized.configuratinos.PartlyAnnotatedConfiguration;
 import org.junit.Test;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class HelpUtilitiesTest {
@@ -56,5 +58,18 @@ public class HelpUtilitiesTest {
         assertTrue(result.contains("\tval(String)"));
         assertTrue(result.contains("Some value"));
 
+    }
+
+    @Test
+    public void helpShouldExcludeStaticField(){
+        // Arrange
+
+        // Act
+        final String result = HelpUtilities.generateHelpString(
+                ConfigurationWithStaticField.class
+        );
+
+        // Assert
+        assertFalse(result.contains("staticString"));
     }
 }
