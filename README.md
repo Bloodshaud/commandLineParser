@@ -1,6 +1,6 @@
 [![Testsuite](https://github.com/Ernstsen/CommandLineParser/workflows/Test-suite/badge.svg)](https://github.com/Ernstsen/CommandLineParser/actions)
 [![Test Coverage](https://codecov.io/gh/Ernstsen/CommandLineParser/branch/master/graph/badge.svg?token=NMG1R3WWZ1)](https://codecov.io/gh/Ernstsen/CommandLineParser)
-[![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/Ernstsen/CommandLineParser.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Ernstsen/CommandLineParser/context:java)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/183798c4780845f0be5171725d13beed)](https://app.codacy.com/gh/Ernstsen/CommandLineParser/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Maven Central](https://img.shields.io/maven-central/v/dk.e-software/commandLineParser)](https://mvnrepository.com/artifact/dk.e-software/commandLineParser)
 
 # CommandLineParser
