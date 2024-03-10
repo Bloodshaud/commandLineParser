@@ -68,10 +68,10 @@ public class ExampleConfiguration implements Configuration {
 
 In this example the value ``booleanValue`` can be set in the following ways:
 
-- ``--val=true``
-- ``--val -true``
-- ``--value=true``
-- ``--value -true``
+-   ``--val=true``
+-   ``--val -true``
+-   ``--value=true``
+-   ``--value -true``
 
 ### Nesting
 
@@ -95,10 +95,11 @@ public class ExampleConfiguration2 implements Configuration {
 
 The ways to set the same boolean as in the example above is as follows:
 
-- ``--nested.val=true``
-- ``--nested.val -true``
-- ``--nested.value=true``
-- ``--nested.value -true``
+-   ``--nested.val=true``
+-   ``--nested.val -true``
+-   ``--nested.value=true``
+-   ``--nested.value -true``
 
 # JavaDocs
+
 JavaDocs can be found [here](https://ernstsen.github.io/CommandLineParser/)
