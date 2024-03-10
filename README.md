@@ -16,6 +16,7 @@ then to produce a ``` Configuration ``` from the given arguments, which are give
 CommandLineParser can be retrieved with maven by adding the following to the POM:
 
 ```xml
+
 <dependency>
     <groupId>dk.e-software</groupId>
     <artifactId>commandLineParser</artifactId>
@@ -68,10 +69,10 @@ public class ExampleConfiguration implements Configuration {
 
 In this example the value ``booleanValue`` can be set in the following ways:
 
--   ``--val=true``
--   ``--val -true``
--   ``--value=true``
--   ``--value -true``
+- ``--val=true``
+- ``--val -true``
+- ``--value=true``
+- ``--value -true``
 
 ### Nesting
 
@@ -95,10 +96,10 @@ public class ExampleConfiguration2 implements Configuration {
 
 The ways to set the same boolean as in the example above is as follows:
 
--   ``--nested.val=true``
--   ``--nested.val -true``
--   ``--nested.value=true``
--   ``--nested.value -true``
+- ``--nested.val=true``
+- ``--nested.val -true``
+- ``--nested.value=true``
+- ``--nested.value -true``
 
 # JavaDocs
 
